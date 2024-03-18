@@ -49,7 +49,7 @@ https://github.com/fosfrancesco/asap-dataset.
     - unperformed MIDI corresponds to strict timing as shown in the score. 
     - performed MIDI corresponds to MIDI recording from human musicians performing the piece. In these files you will find the timing of the notes does not corresponds strictly to the symbolic metrical grid (i.e. the metrical grid is distorted).
 - The dataset contains pieces from different styles, you can decide which subcollection to use.
-- The dataset does not contain information about loudness/dynamics in the MIDI files (in a MIDI file this is called the "velocity" attribute). For this assignment, any attempts to model velocity will be considered a plus and you can do it freely according to your musical intuition. 
+- ~~The dataset does not contain information about loudness/dynamics in the MIDI files (in a MIDI file this is called the "velocity" attribute).~~ For this assignment, any attempts to model velocity will be considered a plus and you can do it freely according to your musical intuition. 
 
 <!-- For this assignment we will only focus on Bach Preludes that have at least one MIDI performance. -->
 
