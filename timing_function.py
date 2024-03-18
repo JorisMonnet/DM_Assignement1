@@ -15,32 +15,17 @@ def timing(unperformed_midi_path: str, performed_midi_path: str) -> dict and dic
 
     times = {}
     velocities = {}
+    tempo_mapping = {}
+    velocity_mapping = {}
 
     for note in music21_midi_unperformed.flat.notes:
-        times[note.offset] = {"unperformed": note.duration.quarterLength, "performed": 0}
-        velocities[note.offset] = {"unperformed": note.volume.velocity, "performed": 0}
+        times[note.offset] = note.duration.quarterLength
+        velocities[note.offset] = note.volume.velocity
 
     for note in music21_midi_performed.flat.notes:
         if note.offset in times:
-            velocities[note.offset]["performed"] = note.volume.velocity
-            times[note.offset]["performed"] = note.duration.quarterLength
-
-    # Time mapping and velocity mapping are dictionaries with the same keys
-    # but different values. The keys are the time of the note and the values
-    # are dictionaries with the unperformed and performed values of the note.
-    # Now we want to create a tempo map and a velocity map from these mappings.
-    # The tempo map will have the time as key and the tempo as value.
-    # The velocity map will have the time as key and the velocity as value.
-
-    tempo_mapping = {}
-    for time in times:
-        if times[time]["performed"] != 0:
-            tempo_mapping[time] = times[time]["unperformed"] / times[time]["performed"]
-
-    velocity_mapping = {}
-    for time in velocities:
-        if velocities[time]["performed"] != 0:
-            velocity_mapping[time] = velocities[time]["unperformed"] / velocities[time]["performed"]
+            tempo_mapping[note.offset] = note.duration.quarterLength / times[note.offset]
+            velocity_mapping[note.offset] = note.volume.velocity / velocities[note.offset]
 
     return tempo_mapping, velocity_mapping
 
