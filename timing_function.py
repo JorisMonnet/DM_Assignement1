@@ -30,8 +30,6 @@ def timing(unperformed_midi_path: str, performed_midi_path: str) -> dict and dic
     return tempo_mapping, velocity_mapping
 
 
-
-
 def plot_timing_as_tempo_curve(tempo_map: dict):
     """
     Plot the tempo_map from timing function as a tempo curve.
