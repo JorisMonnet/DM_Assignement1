@@ -90,6 +90,25 @@ def get_average_from_sum_and_lengths(sum_and_lengths: dict) -> dict:
                     for i in range(len(sum_and_lengths[meter]["sum_durations"]))] for meter in sum_and_lengths}
 
 
+def get_average_symbolic_and_performed_times(folder_path: str) -> tuple[dict, dict]:
+    """
+    Get the average symbolic and performed times for each beat of a meter
+    :param folder_path: path to the folder containing all the annotations files (can be in sub folders)
+    :return: dict with meter as key and the average symbolic times for each beat as list and
+    dict with meter as key and the average performed times for each beat as list
+    """
+    annotations_files = get_annotations_files_from_folder(folder_path)
+    symbolic_files = [file for file in annotations_files if "midi_score_annotations.txt" in file]
+    perf_files = [file for file in annotations_files if "midi_score_annotations.txt" not in file]
+    sum_and_lengths_list = [get_sum_and_lengths_timing_one_bar(file) for file in perf_files]
+    merged_sum_and_lengths = merge_sum_and_lengths_timings(sum_and_lengths_list)
+    average_perf = get_average_from_sum_and_lengths(merged_sum_and_lengths)
+    sum_and_lengths_list = [get_sum_and_lengths_timing_one_bar(file) for file in symbolic_files]
+    merged_sum_and_lengths = merge_sum_and_lengths_timings(sum_and_lengths_list)
+    average_symbolic = get_average_from_sum_and_lengths(merged_sum_and_lengths)
+    return average_symbolic, average_perf
+
+
 def get_annotations_files_from_folder(folder_path: str) -> list:
     """
     Get the path of all the annotations files in a folder and its sub folders
@@ -106,15 +125,23 @@ def get_annotations_files_from_folder(folder_path: str) -> list:
     return txt_files
 
 
+def timing(folder_path: str) -> dict:
+    """
+    Get the tempo ratio between symbolic and performed times for each beat of a meter
+    :param folder_path: path to the folder containing all the annotations files (can be in sub folders)
+    :return: dict with meter as key and the tempo ratio for each beat as list
+    """
+    perf_average, symbolic_average = get_average_symbolic_and_performed_times(folder_path)
+    result = {}
+    for meter in perf_average:
+        result[meter] = [perf_average[meter][i] / symbolic_average[meter][i] for i in range(len(perf_average[meter]))]
+    return result
+
+
 if __name__ == "__main__":
     # symbolic = get_sum_and_lengths_timing_one_bar("../asap-dataset/Bach/Fugue/bwv_846/midi_score_annotations.txt")
     # performance = get_sum_and_lengths_timing_one_bar("../asap-dataset/Bach/Fugue/bwv_846/Shi05M_annotations.txt")
     # print(get_average_from_sum_and_lengths(symbolic))
     # print(get_average_from_sum_and_lengths(performance))
 
-    files_list = get_annotations_files_from_folder("../asap-dataset/")
-    perf_files = [file for file in files_list if "midi_score_annotations.txt" not in file]
-    sum_and_lengths_list = [get_sum_and_lengths_timing_one_bar(file) for file in perf_files]
-    merged_sum_and_lengths = merge_sum_and_lengths_timings(sum_and_lengths_list)
-    average = get_average_from_sum_and_lengths(merged_sum_and_lengths)
-    print(average)
+    print(timing("../asap-dataset/Bach/Fugue/bwv_854"))
