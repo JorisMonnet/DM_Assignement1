@@ -114,23 +114,6 @@ def get_average_timing_one_piece(folder_path: str) -> dict or None:
         return get_piece_symbolic_to_performed_times(folder_path + "/midi_score_annotations.txt",
                                                      folder_path + "/" + files[0])
 
-
-def get_average_timing_one_piece(folder_path: str) -> dict or None:
-    """
-    Get the attributes for each beat for a piece where the piece can have
-    multiple performances
-    :param folder_path: the path to the piece folder
-    :return: dict
-    """
-    files = [file for file in os.listdir(folder_path) if file.endswith("annotations.txt")]
-    files.remove("midi_score_annotations.txt")
-    if len(files) == 0:
-        print("No annotation files found")
-        return
-    if len(files) == 1:
-        return get_piece_symbolic_to_performed_times(folder_path + "/midi_score_annotations.txt",
-                                                     folder_path + "/" + files[0])
-
     # Case multiple files :
     # Get the symbolic times only once
     symbolic_times = get_symbolic_attributes(folder_path + "/midi_score_annotations.txt")
