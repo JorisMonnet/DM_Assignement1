@@ -6,7 +6,7 @@ This module contains functions used to plot the results for Task A.
 """
 
 import matplotlib.pyplot as plt
-
+import seaborn as sns
 
 def plot_timing_for_one_piece(tempo_map: dict):
     """
@@ -29,10 +29,11 @@ def plot_timing(tempo_map: dict):
     :return: None
     """
     for meter in tempo_map:
-        fig, ax = plt.subplots()
-        ax.plot(list(range(len(tempo_map[meter]))), tempo_map[meter], 'bo--')
-        ax.xaxis.set_major_locator(plt.MaxNLocator(integer=True))
-        ax.set(xlabel='Beats', ylabel='Tempo Ratio',
-               title=f'Tempo curve for {meter}')
-        ax.grid()
-        plt.show()
+        sns.lineplot(x=list(range(len(tempo_map[meter]))), y=tempo_map[meter], label=meter)
+    plt.xlabel('Beats')
+    plt.ylabel('Tempo Ratio')
+    plt.title('Tempo curve')
+    plt.grid()
+    # Put legend outside the plot
+    plt.legend(title='Meter', bbox_to_anchor=(1.05, 1), loc='upper left')
+    plt.show()
