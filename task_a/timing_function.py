@@ -130,10 +130,10 @@ def timing(folder_path: str) -> dict:
     :return: dict with meter as key and the tempo ratio for each beat as list
     """
     perf_average, symbolic_average = get_average_symbolic_and_performed_times(folder_path)
-    result = {}
-    for meter in perf_average:
-        result[meter] = [perf_average[meter][i] / symbolic_average[meter][i] for i in range(len(perf_average[meter]))]
-    return result
+    return {
+        meter: [perf_average[meter][i] / symbolic_average[meter][i] for i in range(len(perf_average[meter]))]
+        for meter in perf_average
+    }
 
 
 if __name__ == "__main__":

@@ -19,7 +19,7 @@ def plot_timing_for_one_piece(tempo_map: dict):
     ax.plot(list(tempo_map.keys()), list(tempo_map.values()))
     ax.set(xlabel='Beats', ylabel='Tempo Ratio',
            title='Tempo curve')
-    ax.grid()
+    plt.grid(True)
     plt.show()
 
 
@@ -36,7 +36,7 @@ def plot_timing(tempo_map: dict):
     plt.ylabel('Tempo Ratio')
     plt.title('Tempo curve')
     plt.xticks(range(len(longest_meter) + 1))
-    plt.grid()
+    plt.grid(True)
     # Put legend outside the plot
     plt.legend(title='Meter', bbox_to_anchor=(1.05, 1), loc='upper left')
     plt.show()
