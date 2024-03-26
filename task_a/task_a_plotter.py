@@ -30,7 +30,8 @@ def plot_timing(tempo_map: dict):
     """
     for meter in tempo_map:
         fig, ax = plt.subplots()
-        ax.plot(list(range(len(tempo_map[meter]))), tempo_map[meter])
+        ax.plot(list(range(len(tempo_map[meter]))), tempo_map[meter], 'bo--')
+        ax.xaxis.set_major_locator(plt.MaxNLocator(integer=True))
         ax.set(xlabel='Beats', ylabel='Tempo Ratio',
                title=f'Tempo curve for {meter}')
         ax.grid()
