@@ -43,13 +43,62 @@ def read_musicxml_and_normalize(path: str) -> dict:
                     print(f"Warning: '{relative_path}' contains no notes.")
     return music_data
 
+
+def plot_pitch_contours(music_data: dict, title: str = "Normalized Time Pitch Contour") -> None:
+    """
+    Plots the pitch contour of given musical data.
+    :param music_data: A dictionary containing the music data to plot.
+    :param title: The title of the plot.
+    :return: None
+    """
+    plt.figure(figsize=(30, 10))
+
+    for key, data in music_data.items():
+        plt.plot(data["times"], data["pitches"], linestyle='-', label=key)
+
+    plt.title(title)
+    plt.xlabel('Normalized Time')
+    plt.ylabel('Pitch (MIDI Note Number)')
+    plt.legend(loc='upper left', bbox_to_anchor=(1, 1))
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+
 def plot_average_pitch_contours(music_data: dict, title: str = "Normalized Average Time Pitch Contour"):
     """
     Plots the average pitch profile of given music data.
     :param music_data: A dictionary containing normalized time and pitch data for each piece.
     :param title: The title of the plot.
     """
-    plot_all_average_pitch_contours({"": music_data}, title)
+    # Combine pitch data for all tracks into one list
+    all_pitches = [data['pitches'] for data in music_data.values()]
+    all_times = [data['times'] for data in music_data.values()]
+
+    # Align all time and pitch data to the same timeline
+    # Here you need to create a timeline that is common to all tracks
+    # Assume that all tracks are already processed with the same normalized time length
+    max_time_points = max(len(times) for times in all_times)
+    common_time_line = np.linspace(0, 1, max_time_points)
+
+    pitch_values_at_common_times = np.zeros((len(all_pitches), max_time_points))
+
+    # Interpolate
+    for i, (times, pitches) in enumerate(zip(all_times, all_pitches)):
+        pitch_values_at_common_times[i] = np.interp(common_time_line, times, pitches)
+
+    # Calculate the average pitch at each time point on a universal timeline
+    average_pitches = np.mean(pitch_values_at_common_times, axis=0)
+
+    plt.figure(figsize=(12, 6))
+    plt.plot(common_time_line, average_pitches, label="Average Pitch Contour")
+    plt.title(title)
+    plt.xlabel('Normalized Time')
+    plt.ylabel('Pitch (MIDI Note Number)')
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
 
 
 def plot_cdf(music_data: dict, title: str = "CDF of Pitch Frequencies") -> None:
