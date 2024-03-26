@@ -13,9 +13,16 @@ pip install -r requirements.txt
 
 ## Architecture
 
-timing_function.py contain the timing function from **Task A**.
-
-empirical_findings.ipynb contains all the empirical findings from **Task B**
+| task_a \
+         | task_a_plotter.py -> Plotting the results from task_a
+         | timing_for_one_piece.py -> Implementation of the timing function for one piece
+         | timing_function.py -> Implementation of the timing function for multiple pieces
+| task_b \
+         | constants.py -> Constants used in the task_b
+         | q1.py -> Analysis of the distribution of note onsets on metrical locations
+         | q1b.py -> Analysis of the expressive timing
+         | q2.py -> Analysis of the Pitches
+| empirical_findings.ipynb -> Global notebook with all results and analysis
 
 # Instructions:
 
