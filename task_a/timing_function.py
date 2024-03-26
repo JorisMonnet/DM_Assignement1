@@ -24,7 +24,8 @@ def merge_sum_and_lengths_timings(sum_and_lengths: list[dict]) -> dict:
                 }
             meter_for_result = meter
             if len(result[meter]["sum_durations"]) != len(sum_and_lengths_file[meter]["sum_durations"]):
-                meter_for_result = f"{meter}_with_{str(len(sum_and_lengths_file[meter]['sum_durations']))}_db"
+                meter_for_result = (f"{meter}_with_{str(len(sum_and_lengths_file[meter]['sum_durations']))}_downbeat"
+                                    f"{'s' if len(sum_and_lengths_file[meter]['sum_durations']) > 1 else ''}")
                 result[meter_for_result] = {
                     "sum_durations": [0 for _ in range(len(sum_and_lengths_file[meter]["sum_durations"]))],
                     "number_of_beats": [0 for _ in range(len(sum_and_lengths_file[meter]["sum_durations"]))],
@@ -46,9 +47,9 @@ def get_sum_and_lengths_timing_one_bar(path: str) -> dict:
         symbolic_data = f.readlines()
         current_beat = 0
         current_meter = None
-        previous_onset = 0
-        for line in symbolic_data:
-            line_data = line.split()
+        for i in range(len(symbolic_data) - 1):
+            line_data = symbolic_data[i].split()
+            next_line_data = symbolic_data[i + 1].split()
             beat_type_meter_key = line_data[2].split(',')
             meter = beat_type_meter_key[1] if len(beat_type_meter_key) > 1 else ""
             if meter != current_meter and meter != "":
@@ -60,23 +61,20 @@ def get_sum_and_lengths_timing_one_bar(path: str) -> dict:
                     }
                 current_beat = 0
             elif current_meter is None:
-                # Anacrusis, need to update the previous onset to get a correct first beat onset
-                previous_onset = float(line_data[0])
+                # Anacrusis
                 continue
             if beat_type_meter_key[0] == "db":
                 current_beat = 0  # Downbeat
             elif beat_type_meter_key[0] == "b":
                 current_beat += 1  # other beats
             elif beat_type_meter_key[0] == "bR":  # Remove beats with type bR (beats that are not in the meter)
-                previous_onset = float(line_data[0])
                 continue
-            new_onset = float(line_data[0]) - previous_onset
+            new_onset = float(next_line_data[0]) - float(line_data[0])
             if len(result[current_meter]["sum_durations"]) <= current_beat:
                 result[current_meter]["sum_durations"].append(0)
                 result[current_meter]["number_of_beats"].append(0)
             result[current_meter]["sum_durations"][current_beat] += new_onset
             result[current_meter]["number_of_beats"][current_beat] += 1
-            previous_onset = float(line_data[0])
     return result
 
 
