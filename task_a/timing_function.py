@@ -139,9 +139,4 @@ def timing(folder_path: str) -> dict:
 
 
 if __name__ == "__main__":
-    # symbolic = get_sum_and_lengths_timing_one_bar("../asap-dataset/Bach/Fugue/bwv_846/midi_score_annotations.txt")
-    # performance = get_sum_and_lengths_timing_one_bar("../asap-dataset/Bach/Fugue/bwv_846/Shi05M_annotations.txt")
-    # print(get_average_from_sum_and_lengths(symbolic))
-    # print(get_average_from_sum_and_lengths(performance))
-
-    print(timing("../asap-dataset/Bach/Fugue/bwv_854"))
+    print(timing("../asap-dataset"))
