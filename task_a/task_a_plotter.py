@@ -1,3 +1,10 @@
+"""
+This module contains functions used to plot the results for Task A.
+
+@Author: Joris Monnet
+@Date: 2024-03-26
+"""
+
 import matplotlib.pyplot as plt
 
 

@@ -1,3 +1,10 @@
+"""
+This module contains functions to get the timing attributes for a single piece.
+
+@Author: Joris Monnet
+@Date: 2024-03-26
+"""
+
 import os
 
 

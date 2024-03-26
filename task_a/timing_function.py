@@ -1,3 +1,10 @@
+"""
+This module contains functions to get the timing attributes for multiple pieces
+by averaging the timing attributes for each beat of a meter.
+
+@Author: Joris Monnet
+@Date: 2024-03-26
+"""
 import os
 
 
@@ -54,7 +61,7 @@ def get_average_from_sum_and_lengths(sum_and_lengths: dict) -> dict:
     return average
 
 
-def get_subfolders_with_parent_name(parent_folder):
+def get_sub_folders(parent_folder: str):
     """
     Get sub folders with the name of the parent folder.
     :param parent_folder: Path to the parent folder.
@@ -66,12 +73,6 @@ def get_subfolders_with_parent_name(parent_folder):
         if os.path.isdir(full_path) and entry == os.path.basename(parent_folder):
             sub_folders.append(full_path)
     return sub_folders
-
-
-def get_average_timing_specific_meter(folder_path: str, meter: str):
-    sub_folders = get_subfolders_with_parent_name(folder_path)
-    return sub_folders
-
 
 if __name__ == "__main__":
     symbolic = get_sum_and_lengths_timing_one_bar("./asap-dataset/Chopin/Ballades/1/midi_score_annotations.txt")
